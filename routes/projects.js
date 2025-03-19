@@ -15,6 +15,11 @@ router.get('/', async (req, res) => {
  * POST /projects
  * Créer un nouveau projet
  */
+router.post('/', async (req, res) => {
+  const project = new Project(req.body);
+  await project.save();
+  res.status(201).json(project);
+});
 
 /**
  * GET /projects/{id}
