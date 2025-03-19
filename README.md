@@ -1,5 +1,14 @@
 # TimeTracking API
 
+## Installation du projet
+
+```bash
+npm install
+docker compose up
+```
+
+Ouvrir le navigateur sur l'adresse http://localhost:3000/
+
 ## Création du projet
 
 ### Installation avec Express Generator
