@@ -23,3 +23,13 @@ Modifier le fichier package.json pour modifier la commande de démarrage du serv
   "start": "node --env-file=.env --env-file=.env.local ./bin/www"
 }
 ```
+
+### Redémarrage automatique du serveur
+
+Modifier le fichier package.json pour modifier la commande de démarrage du serveur.
+
+```json
+"scripts": {
+  "start": "node --env-file=.env --env-file=.env.local --watch ./bin/www"
+}
+```
