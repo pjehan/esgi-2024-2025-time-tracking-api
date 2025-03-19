@@ -1,11 +1,12 @@
 import express from 'express';
+import Project from '../models/Project.js';
 const router = express.Router();
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  const { db } = req.app.locals;
-  await db.collection('projects').insertOne({ name: 'test' });
-  const projects = await db.collection('projects').find().toArray();
+  const project = new Project({ name: 'test' });
+  await project.save();
+  const projects = await Project.find();
   res.json(projects);
 });
 
