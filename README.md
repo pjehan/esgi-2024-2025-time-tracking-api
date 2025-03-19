@@ -5,6 +5,7 @@
 ```bash
 npm install
 docker compose up
+npm start
 ```
 
 Ouvrir le navigateur sur l'adresse http://localhost:3000/
