@@ -77,8 +77,8 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), async (r
   try {
     // Vérifier si le projet existe et si l'utilisateur a le droit de supprimer ce projet
     let project = await Project.findById(req.params.id);
-    if (project.user === undefined || !project.user.equals(req.user._id)) {
-      res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
+    if (project === null) {
+      res.status(404).json({ message: 'Ce projet n\'existe pas' });
     } else if (project.user === undefined || !project.user.equals(req.user._id)) {
       res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
     } else {
