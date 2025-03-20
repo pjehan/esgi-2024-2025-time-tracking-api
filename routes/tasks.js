@@ -1,28 +1,50 @@
 import express from 'express';
 import passport from "passport";
-import Project from '../models/Project.js';
+import Task from '../models/Task.js';
+import Project from "../models/Project.js";
 const router = express.Router();
 
 /**
- * GET /projects?page=2&limit=20
- * Retourner la liste des projets
+ * GET /tasks?projectid=
+ * Retourner la liste des tâches
  */
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  // #swagger.tags = ['Projects']
-  const projects = await Project.find({ user: req.user._id });
-  res.json(projects);
+  // #swagger.tags = ['Tasks']
+  //const tasks = await Task.find({ "project.user": req.user._id }).populate("project").exec();
+
+  const tasks = await Project.aggregate([
+    { $match: { user: req.user._id } },
+    {
+      $lookup: {
+        from: 'tasks',
+        localField: '_id',
+        foreignField: 'project',
+        as: 'tasks'
+      }
+    },
+    { $unwind: '$tasks' },
+    { $replaceRoot: { newRoot: '$tasks' } }
+  ]);
+  /*
+  const tasks = await Task.find().populate({
+    path: 'project',
+    match: { user: req.user._id }
+  });
+  */
+
+  res.json(tasks);
 });
 
 /**
- * POST /projects
- * Créer un nouveau projet
+ * POST /tasks
+ * Créer une nouvelle tâche
  */
 router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  // #swagger.tags = ['Projects']
-  const project = new Project({ ...req.body, user: req.user._id });
+  // #swagger.tags = ['Tasks']
+  const task = new Task({ ...req.body });
 
-  await project.save();
-  res.status(201).json(project);
+  await task.save();
+  res.status(201).json(task);
 });
 
 /**
