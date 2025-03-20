@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from "passport";
 import Project from '../models/Project.js';
 const router = express.Router();
 
@@ -6,9 +7,9 @@ const router = express.Router();
  * GET /projects
  * Retourner la liste des projets
  */
-router.get('/', async (req, res) => {
+router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // #swagger.tags = ['Projects']
-  const projects = await Project.find();
+  const projects = await Project.find({ user: req.user._id });
   res.json(projects);
 });
 
@@ -16,9 +17,10 @@ router.get('/', async (req, res) => {
  * POST /projects
  * Créer un nouveau projet
  */
-router.post('/', async (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // #swagger.tags = ['Projects']
-  const project = new Project(req.body);
+  const project = new Project({ ...req.body, user: req.user._id });
+
   await project.save();
   res.status(201).json(project);
 });
