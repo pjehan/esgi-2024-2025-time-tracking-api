@@ -25,16 +25,51 @@ router.post('/', async (req, res) => {
  * GET /projects/{id}
  * Retourner les données d'un projet
  */
+router.get('/:id', async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (project === null) {
+      res.status(404).json({ message: 'Ce projet n\'existe pas' });
+    } else {
+      res.json(project);
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'invalid id' });
+  }
+});
 
 /**
  * PUT /projects/{id}
  * Mettre à jour les données d'un projet
  */
+router.put('/:id', async (req, res) => {
+  try {
+    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (project === null) {
+      res.status(404).json({ message: 'Ce projet n\'existe pas' });
+    } else {
+      res.json(project);
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'invalid id' });
+  }
+});
 
 /**
  * DELETE /projects/{id}
  * Supprimer un projet
  */
-
+router.delete('/:id', async (req, res) => {
+  try {
+    const project = await Project.findByIdAndDelete(req.params.id);
+    if (project === null) {
+      res.status(404).json({ message: 'Ce projet n\'existe pas' });
+    } else {
+      res.json({ message: 'Projet supprimé avec succès' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'invalid id' });
+  }
+});
 
 export default router;
