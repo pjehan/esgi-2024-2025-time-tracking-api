@@ -59,10 +59,10 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), async (req,
       res.status(404).json({ message: 'Ce projet n\'existe pas' });
     } else if (project.user === undefined || !project.user.equals(req.user._id)) {
       res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
+    } else {
+      project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      res.json(project);
     }
-
-    project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(project);
   } catch (error) {
     res.status(400).json({ message: 'invalid id' });
   }
@@ -81,10 +81,10 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), async (r
       res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
     } else if (project.user === undefined || !project.user.equals(req.user._id)) {
       res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
+    } else {
+      await Project.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Projet supprimé avec succès' });
     }
-
-    await Project.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Projet supprimé avec succès' });
   } catch (error) {
     res.status(400).json({ message: 'invalid id' });
   }
