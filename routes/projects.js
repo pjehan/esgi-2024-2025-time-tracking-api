@@ -29,16 +29,19 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
  * GET /projects/{id}
  * Retourner les données d'un projet
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // #swagger.tags = ['Projects']
   try {
     const project = await Project.findById(req.params.id);
     if (project === null) {
       res.status(404).json({ message: 'Ce projet n\'existe pas' });
+    } else if (project.user === undefined || !project.user.equals(req.user._id)) {
+      res.status(403).json({ message: 'Vous n\'avez pas le droit d\'accéder à ce projet' });
     } else {
       res.json(project);
     }
   } catch (error) {
+    console.log(error)
     res.status(400).json({ message: 'invalid id' });
   }
 });
@@ -47,15 +50,19 @@ router.get('/:id', async (req, res) => {
  * PUT /projects/{id}
  * Mettre à jour les données d'un projet
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // #swagger.tags = ['Projects']
   try {
-    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // Vérifier si le projet existe et si l'utilisateur a le droit de modifier ce projet
+    let project = await Project.findById(req.params.id);
     if (project === null) {
       res.status(404).json({ message: 'Ce projet n\'existe pas' });
-    } else {
-      res.json(project);
+    } else if (project.user === undefined || !project.user.equals(req.user._id)) {
+      res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
     }
+
+    project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(project);
   } catch (error) {
     res.status(400).json({ message: 'invalid id' });
   }
@@ -65,15 +72,19 @@ router.put('/:id', async (req, res) => {
  * DELETE /projects/{id}
  * Supprimer un projet
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // #swagger.tags = ['Projects']
   try {
-    const project = await Project.findByIdAndDelete(req.params.id);
-    if (project === null) {
-      res.status(404).json({ message: 'Ce projet n\'existe pas' });
-    } else {
-      res.json({ message: 'Projet supprimé avec succès' });
+    // Vérifier si le projet existe et si l'utilisateur a le droit de supprimer ce projet
+    let project = await Project.findById(req.params.id);
+    if (project.user === undefined || !project.user.equals(req.user._id)) {
+      res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
+    } else if (project.user === undefined || !project.user.equals(req.user._id)) {
+      res.status(403).json({ message: 'Vous n\'avez pas le droit de modifier ce projet' });
     }
+
+    await Project.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Projet supprimé avec succès' });
   } catch (error) {
     res.status(400).json({ message: 'invalid id' });
   }
