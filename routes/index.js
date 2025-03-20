@@ -1,13 +1,10 @@
 import express from 'express';
-import Project from '../models/Project.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger-output.json' with { type: "json" };
+
 const router = express.Router();
 
-/* GET home page. */
-router.get('/', async function(req, res, next) {
-  const project = new Project({ name: 'test' });
-  await project.save();
-  const projects = await Project.find();
-  res.json(projects);
-});
+router.use('/', swaggerUi.serve);
+router.get('/', swaggerUi.setup(swaggerDocument));
 
 export default router;

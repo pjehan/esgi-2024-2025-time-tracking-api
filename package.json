@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env --env-file=.env.local --watch ./bin/www"
+    "start": "node --env-file=.env --env-file=.env.local --watch ./bin/www",
+    "swagger": "node --env-file=.env --env-file=.env.local ./swagger.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -13,5 +14,9 @@
     "mongodb": "^6.15.0",
     "mongoose": "^8.12.1",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   }
 }
