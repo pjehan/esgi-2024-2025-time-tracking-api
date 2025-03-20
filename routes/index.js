@@ -5,6 +5,8 @@ import swaggerDocument from '../swagger-output.json' with { type: "json" };
 const router = express.Router();
 
 router.use('/', swaggerUi.serve);
-router.get('/', swaggerUi.setup(swaggerDocument));
+router.get('/', swaggerUi.setup(swaggerDocument), () => {
+  // #swagger.ignore = true
+});
 
 export default router;

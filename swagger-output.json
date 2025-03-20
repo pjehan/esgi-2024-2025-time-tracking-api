@@ -11,18 +11,11 @@
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/users/": {
       "get": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -33,6 +26,9 @@
     },
     "/projects/": {
       "get": {
+        "tags": [
+          "Projects"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -41,6 +37,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Projects"
+        ],
         "description": "",
         "responses": {
           "201": {
@@ -51,6 +50,9 @@
     },
     "/projects/{id}": {
       "get": {
+        "tags": [
+          "Projects"
+        ],
         "description": "",
         "parameters": [
           {
@@ -75,6 +77,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Projects"
+        ],
         "description": "",
         "parameters": [
           {
@@ -99,6 +104,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Projects"
+        ],
         "description": "",
         "parameters": [
           {

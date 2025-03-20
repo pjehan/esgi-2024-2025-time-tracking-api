@@ -7,6 +7,7 @@ const router = express.Router();
  * Retourner la liste des projets
  */
 router.get('/', async (req, res) => {
+  // #swagger.tags = ['Projects']
   const projects = await Project.find();
   res.json(projects);
 });
@@ -16,6 +17,7 @@ router.get('/', async (req, res) => {
  * Créer un nouveau projet
  */
 router.post('/', async (req, res) => {
+  // #swagger.tags = ['Projects']
   const project = new Project(req.body);
   await project.save();
   res.status(201).json(project);
@@ -26,6 +28,7 @@ router.post('/', async (req, res) => {
  * Retourner les données d'un projet
  */
 router.get('/:id', async (req, res) => {
+  // #swagger.tags = ['Projects']
   try {
     const project = await Project.findById(req.params.id);
     if (project === null) {
@@ -43,6 +46,7 @@ router.get('/:id', async (req, res) => {
  * Mettre à jour les données d'un projet
  */
 router.put('/:id', async (req, res) => {
+  // #swagger.tags = ['Projects']
   try {
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (project === null) {
@@ -60,6 +64,7 @@ router.put('/:id', async (req, res) => {
  * Supprimer un projet
  */
 router.delete('/:id', async (req, res) => {
+  // #swagger.tags = ['Projects']
   try {
     const project = await Project.findByIdAndDelete(req.params.id);
     if (project === null) {

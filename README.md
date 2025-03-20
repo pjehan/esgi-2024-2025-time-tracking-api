@@ -5,6 +5,7 @@
 ```bash
 npm install
 docker compose up
+npm run swagger # Optionnel
 npm start
 ```
 
